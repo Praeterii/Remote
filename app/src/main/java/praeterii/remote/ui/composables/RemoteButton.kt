@@ -3,6 +3,7 @@ package praeterii.remote.ui.composables
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -20,12 +21,15 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface // For wrapping previews with a theme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview // Import Preview
 import androidx.compose.ui.unit.Dp
@@ -54,20 +58,29 @@ fun RemoteButton(
         MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
     )
 ) {
-    // Determine which painter to use
     val finalPainter: Painter? = when {
         painter != null -> painter
         iconResId != null -> painterResource(id = iconResId)
         else -> null // If icon (ImageVector) is also null, no icon will be shown by this logic
     }
 
+    // Get the haptic feedback instance
+    val haptic = LocalHapticFeedback.current
+    val interactionSource = remember { MutableInteractionSource() }
+
     OutlinedButton(
-        onClick = onClick,
+        onClick = {
+            // Perform haptic feedback
+            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            // Execute the original onClick lambda
+            onClick()
+        },
         modifier = modifier.size(buttonSize),
         shape = shape,
         contentPadding = PaddingValues(0.dp), // Important for icon-only buttons
         colors = colors,
-        border = if ((icon != null || finalPainter != null) && text == null && shape == CircleShape) null else border // Adjusted logic for cleaner circular icon-only buttons
+        border = if ((icon != null || finalPainter != null) && text == null && shape == CircleShape) null else border, // Adjusted logic for cleaner circular icon-only buttons
+        interactionSource = interactionSource // Good practice, though not strictly needed just for haptic on click
     ) {
         if (text != null) {
             Text(text, fontSize = fontSize)
