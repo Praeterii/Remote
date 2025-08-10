@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import praeterii.remote.ui.composables.TvRemoteUi
 import praeterii.remote.ui.theme.RemoteTheme
+import praeterii.remote.utils.PatternUtils.necToPulsePattern
 import praeterii.remote.utils.RemoteButtonType
 
 class MainActivity : ComponentActivity() {
@@ -135,6 +136,7 @@ class MainActivity : ComponentActivity() {
                 651, 1617, 651, 1640, 628, 1640, 628, 39937, 9097, 2167,
                 652
             )
+            RemoteButtonType.INPUT -> necToPulsePattern(0x04, 0x0B)
         }
 
         if (pattern != null) {
@@ -178,46 +180,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun necToPulsePattern(addressByte: Int, commandByte: Int): IntArray {
-        val carrierFrequencyHz = 38000
-
-        val pulses = mutableListOf<Int>()
-
-        // NEC Timings in microseconds
-        val headerMark = 9000
-        val headerSpace = 4500
-        val bitMark = 560 // Mark is same for 0 and 1
-        val zeroSpace = 560
-        val oneSpace = 1690
-        val stopBitMark = 560
-
-        // 1. Add Header
-        pulses.add(headerMark)
-        pulses.add(headerSpace)
-
-        // 2. Calculate Inverted Values
-        val invertedAddressByte = addressByte.inv() and 0xFF // Ensure it's an 8-bit inversion
-        val invertedCommandByte = commandByte.inv() and 0xFF
-
-        // 3. Data bytes to process (LSB of each byte first)
-        val dataBytes = listOf(addressByte, invertedAddressByte, commandByte, invertedCommandByte)
-
-        // 4. Process each byte
-        for (byteValue in dataBytes) {
-            for (i in 0..7) { // Iterate 8 bits, LSB first
-                val bit = (byteValue shr i) and 1 // Get i-th bit (0 if LSB)
-                pulses.add(bitMark)
-                if (bit == 1) {
-                    pulses.add(oneSpace)
-                } else {
-                    pulses.add(zeroSpace)
-                }
-            }
-        }
-
-        // 5. Add Stop Bit / Final Mark
-        pulses.add(stopBitMark)
-
-        return pulses.toIntArray()
-    }
 }

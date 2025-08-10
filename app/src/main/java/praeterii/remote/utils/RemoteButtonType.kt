@@ -22,5 +22,6 @@ enum class RemoteButtonType {
     // Common Controls
     HOME,
     BACK,
-    MUTE, // Or use a more descriptive name like TOGGLE_MUTE
+    MUTE,
+    INPUT,
 }

@@ -33,17 +33,32 @@ fun TvRemoteUi(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        // Power Button
-        RemoteButton(
-            painter = painterResource(id = R.drawable.ic_power_on_off),
-            onClick = { onButtonClick(RemoteButtonType.POWER) },
-            buttonSize = 64.dp,
-            iconSize = 32.dp,
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-            contentDescription = "Power",
-            iconTintColor = Color.White,
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween, // Distributes space
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // New "Settings" Button - Example
+            RemoteButton(
+                painter = painterResource(id = R.drawable.ic_input),
+                onClick = { onButtonClick(RemoteButtonType.INPUT) },
+                contentDescription = "Input",
+                iconTintColor = MaterialTheme.colorScheme.primary,
+
+                )
+
+            // Power Button - Aligned to the End
+            RemoteButton(
+                painter = painterResource(id = R.drawable.ic_power_on_off),
+                onClick = { onButtonClick(RemoteButtonType.POWER) },
+                buttonSize = 64.dp,
+                iconSize = 32.dp,
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                contentDescription = "Power",
+                iconTintColor = Color.White,
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
