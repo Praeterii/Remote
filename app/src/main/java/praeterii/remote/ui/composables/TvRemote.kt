@@ -135,7 +135,7 @@ fun DPad(
     onDpadClick: (RemoteButtonType) -> Unit,
     modifier: Modifier = Modifier
 ) { // Changed to RemoteButtonType
-    Box(modifier = modifier.size(180.dp), contentAlignment = Alignment.Center) {
+    Box(modifier = modifier.size(200.dp), contentAlignment = Alignment.Center) {
         // Center "OK" Button
         RemoteButton(
             text = "OK",
@@ -151,7 +151,7 @@ fun DPad(
             icon = Icons.Filled.KeyboardArrowUp,
             contentDescription = "Up",
             onClick = { onDpadClick(RemoteButtonType.DPAD_UP) }, // Use Enum
-            buttonSize = 50.dp,
+            buttonSize = 55.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.TopCenter)
         )
@@ -159,7 +159,7 @@ fun DPad(
             icon = Icons.Filled.KeyboardArrowDown,
             contentDescription = "Down",
             onClick = { onDpadClick(RemoteButtonType.DPAD_DOWN) }, // Use Enum
-            buttonSize = 50.dp,
+            buttonSize = 55.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
@@ -167,7 +167,7 @@ fun DPad(
             icon = Icons.Filled.KeyboardArrowLeft,
             contentDescription = "Left",
             onClick = { onDpadClick(RemoteButtonType.DPAD_LEFT) }, // Use Enum
-            buttonSize = 50.dp,
+            buttonSize = 55.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.CenterStart)
         )
@@ -175,7 +175,7 @@ fun DPad(
             icon = Icons.Filled.KeyboardArrowRight,
             contentDescription = "Right",
             onClick = { onDpadClick(RemoteButtonType.DPAD_RIGHT) }, // Use Enum
-            buttonSize = 50.dp,
+            buttonSize = 55.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.CenterEnd)
         )
