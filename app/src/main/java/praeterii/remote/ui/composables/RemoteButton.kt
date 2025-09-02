@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview // Import Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -54,8 +55,8 @@ fun RemoteButton(
     shape: Shape = RoundedCornerShape(12.dp),
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
     border: BorderStroke? = BorderStroke(
-        1.dp,
-        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        width = 1.dp,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
     )
 ) {
     val finalPainter: Painter? = when {
@@ -83,7 +84,7 @@ fun RemoteButton(
         interactionSource = interactionSource // Good practice, though not strictly needed just for haptic on click
     ) {
         if (text != null) {
-            Text(text, fontSize = fontSize)
+            Text(text = text, fontSize = fontSize, textAlign = TextAlign.Center)
         }
 
         // Precedence: explicit painter, then iconResId, then ImageVector
