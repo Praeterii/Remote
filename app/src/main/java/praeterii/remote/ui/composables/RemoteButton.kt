@@ -10,15 +10,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home // For preview
-import androidx.compose.material.icons.filled.Send // For preview
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface // For wrapping previews with a theme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,12 +31,13 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview // Import Preview
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import praeterii.remote.R // Assuming this is your project's R file for drawables
+import praeterii.remote.R
+import praeterii.remote.ui.theme.RemoteTheme
 
 @Composable
 fun RemoteButton(
@@ -197,7 +197,7 @@ fun RemoteButtonPreview_CircularIcon() {
 @Preview(name = "Custom Themed Button", group = "RemoteButton")
 @Composable
 fun RemoteButtonPreview_CustomTheme() {
-    MaterialTheme {
+    RemoteTheme {
         Surface {
             RemoteButton(
                 text = "Custom",

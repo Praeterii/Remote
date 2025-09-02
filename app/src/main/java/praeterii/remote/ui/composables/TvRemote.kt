@@ -1,5 +1,6 @@
 package praeterii.remote.ui.composables
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,7 +19,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import praeterii.remote.R
+import praeterii.remote.ui.theme.RemoteTheme
 import praeterii.remote.utils.RemoteButtonType
+
+private const val EmptyButton = -1
+private val NumberPadNumbers = ((1..9) + EmptyButton +  0)
 
 @Composable
 fun TvRemoteUi(
@@ -187,38 +192,47 @@ fun NumberPad(
     onNumberClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) { // Stays as (Int) -> Unit
-    val numbers = (1..9).toList() + listOf(0) // Numbers 1-9 and 0
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = modifier.width(200.dp), // Adjust width as needed
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(numbers) { number ->
-            RemoteButton(
-                text = number.toString(),
-                onClick = { onNumberClick(number) }, // Directly pass the number
-                buttonSize = 50.dp,
-                fontSize = 18.sp,
-                contentDescription = "Number $number", // Improved content description
+        items(items = NumberPadNumbers, key = { it }) { number ->
+            if (number != EmptyButton) {
+                RemoteButton(
+                    text = number.toString(),
+                    onClick = { onNumberClick(number) },
+                    buttonSize = 50.dp,
+                    fontSize = 18.sp,
+                    contentDescription = "Number $number",
+                )
+            }
+        }
+    }
+}
+
+@Preview(name = "Light Mode")
+@Composable
+fun TvRemoteUiPreview() {
+    RemoteTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            TvRemoteUi(
+                onButtonClick = {},
+                onNumberClick = {}
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun TvRemoteUiPreview() {
-    MaterialTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
+fun TvRemoteUiPreview_DarkMode() {
+    RemoteTheme {
+        Surface {
             TvRemoteUi(
-                onButtonClick = { buttonType ->
-                    println("Button clicked: ${buttonType.name}")
-                },
-                onNumberClick = { number ->
-                    println("Number clicked: $number")
-                }
+                onButtonClick = {},
+                onNumberClick = {}
             )
         }
     }
