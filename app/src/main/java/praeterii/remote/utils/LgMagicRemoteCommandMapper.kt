@@ -1,9 +1,12 @@
 package praeterii.remote.utils
 
+import android.util.Log
+
 // RemoteButtonType and PatternUtils are expected to be in the same package or imported
 
 interface IrPatternMapper {
     fun getPattern(buttonType: RemoteButtonType): IntArray
+    fun getPattern(numberButton: Int): IntArray
 }
 
 class LgMagicRemoteCommandMapper : IrPatternMapper {
@@ -23,7 +26,11 @@ class LgMagicRemoteCommandMapper : IrPatternMapper {
                 651
             )
 
-            RemoteButtonType.CH_UP -> intArrayOf() // TODO
+            RemoteButtonType.CH_UP -> PatternUtils.getSirc20Pattern(
+                deviceAddress = 0x10,
+                extendedAddress = 0x01,
+                command = 0x34
+            )
             RemoteButtonType.OK -> intArrayOf(
                 9120, 4379, 683, 476, 657, 477, 655, 1612, 654, 480,
                 652, 483, 651, 484, 650, 484, 650, 484, 650, 1618,
@@ -58,7 +65,11 @@ class LgMagicRemoteCommandMapper : IrPatternMapper {
                 625
             )
 
-            RemoteButtonType.CH_DOWN -> intArrayOf() // TODO
+            RemoteButtonType.CH_DOWN -> PatternUtils.getSirc20Pattern(
+                deviceAddress = 0x10,
+                extendedAddress = 0x01,
+                command = 0x33
+            )
             RemoteButtonType.HOME -> intArrayOf(
                 9100, 4400, 686, 474, 659, 474, 659, 1608, 658, 476,
                 656, 478, 655, 479, 655, 479, 655, 479, 655, 1613,
@@ -83,6 +94,77 @@ class LgMagicRemoteCommandMapper : IrPatternMapper {
             )
 
             RemoteButtonType.INPUT -> PatternUtils.necToPulsePattern(0x04, 0x0B)
+            RemoteButtonType.DISNEY -> PatternUtils.necToPulsePattern(0x04, 0x31)
+            RemoteButtonType.NETFLIX -> intArrayOf(
+                9119, 4379, 684, 476, 657, 477, 655, 1611, 655, 480, 653, 483, 650,
+                484, 649, 484, 650, 484, 650, 1642, 626, 1619, 649, 508, 626, 1642,
+                626, 1642, 626, 1642, 626, 1642, 626, 1642, 626, 508, 626, 1642, 626,
+                1642, 626, 508, 626, 1642, 625, 508, 626, 1642, 626, 508, 626, 1643,
+                625, 509, 625, 509, 625, 1643, 625, 509, 625, 1643, 625, 509, 625, 1643, 625
+            )
+            RemoteButtonType.AMAZON -> intArrayOf(
+                9121, 4379, 683, 476, 657, 476, 657, 1611, 656, 479, 653, 482,
+                651, 482, 652, 483, 651, 482, 652, 1617, 651, 1617, 651, 483,
+                651, 1617, 651, 1617, 651, 1617, 651, 1617, 650, 1617, 651, 484,
+                650, 483, 651, 1619, 648, 1619, 649, 1618, 650, 507, 627, 1641,
+                627, 507, 627, 1641, 627, 1641, 626, 507, 627, 507, 627, 507, 627,
+                1641, 627, 507, 627, 1642, 626, 39939, 9094, 2172, 648
+            )
+        }
+    }
+
+    override fun getPattern(numberButton: Int): IntArray {
+        return when (numberButton) {
+            0 -> PatternUtils.necToPulsePattern(addressByte = 0x04, commandByte = 0x10)
+            1 -> intArrayOf(
+                9097, 4402, 684, 475, 659, 475, 658, 1609, 657, 477, 655, 480, 653, 480, 653, 480,
+                654, 480, 654, 1615, 653, 1615, 653, 481, 653, 1615, 653, 1615, 653, 1615, 653,
+                1615, 653, 1615, 653, 1615, 653, 481, 652, 481, 653, 481, 653, 1616, 652, 482,
+                652, 482, 651, 482, 652, 483, 650, 1616, 652, 1617, 651, 1617, 651, 505, 629,
+                1618, 650, 1617, 650, 1640, 628, 39937, 9097, 2166, 653
+            )
+            2 -> intArrayOf(
+                9097, 4403, 684, 475, 659, 475, 658, 1610, 656, 478, 654, 480, 653, 480, 653, 480,
+                654, 480, 654, 1614, 654, 1615, 653, 481, 653, 1615, 653, 1615, 653, 1615, 653,
+                1615, 653, 1615, 652, 481, 653, 1615, 653, 481, 652, 481, 653, 1615, 653, 481,
+                653, 481, 652, 482, 652, 1616, 652, 482, 652, 1616, 651, 1616, 652, 482, 651,
+                1616, 652, 1616, 652, 1617, 651, 39937, 9097, 2167, 653
+            )
+            3 -> intArrayOf(
+                9121, 4379, 684, 476, 657, 477, 655, 1611, 655, 480, 653, 482, 651, 483, 651, 483,
+                651, 483, 650, 1618, 650, 1617, 651, 484, 649, 1617, 651, 1617, 651, 1618, 650,
+                1618, 650, 1641, 627, 1619, 649, 1641, 626, 507, 627, 507, 627, 1641, 627, 507,
+                626, 507, 627, 507, 627, 507, 627, 507, 626, 1642, 626, 1642, 626, 508, 626,
+                1642, 626, 1642, 626, 1642, 626, 39939, 9093, 2195, 625
+            )
+            4 -> intArrayOf(
+                9120, 4379, 684, 476, 656, 477, 655, 1612, 654, 481, 651, 507, 626, 507, 627, 507,
+                627, 507, 626, 1642, 626, 1642, 626, 508, 626, 1642, 626, 1642, 625, 1642, 626,
+                1642, 626, 1642, 626, 508, 626, 508, 625, 1643, 625, 508, 626, 1642, 626, 508,
+                626, 508, 626, 508, 626, 1643, 624, 1643, 625, 508, 626, 1643, 625, 509, 625,
+                1643, 625, 1643, 625, 1643, 625, 39940, 9092, 2197, 624
+            )
+            5 -> PatternUtils.necToPulsePattern(addressByte = 0x04, commandByte = 0x15)
+            6 -> PatternUtils.necToPulsePattern(addressByte = 0x04, commandByte = 0x16)
+            7 -> intArrayOf(
+                9097, 4402, 685, 475, 659, 475, 658, 1609, 657, 478, 654, 480, 654, 480, 653, 480,
+                654, 480, 654, 1615, 653, 1615, 653, 481, 653, 1615, 653, 1615, 653, 1615, 653,
+                1615, 653, 1615, 653, 1615, 653, 1615, 653, 1616, 652, 481, 653, 1615, 653, 481,
+                653, 481, 653, 481, 653, 482, 651, 482, 652, 482, 651, 1616, 652, 483, 651,
+                1617, 651, 1617, 651, 1617, 651, 39937, 9097, 2168, 652
+            )
+            8 -> intArrayOf(
+                9119, 4378, 684, 476, 657, 476, 657, 1611, 655, 480, 652, 507, 626, 507, 627, 507,
+                627, 507, 626, 1642, 626, 1641, 627, 507, 627, 1642, 625, 1642, 626, 1642, 626,
+                1642, 626, 1642, 626, 507, 626, 508, 626, 507, 627, 1642, 626, 1642, 626, 508,
+                626, 508, 626, 508, 625, 1642, 626, 1642, 626, 1642, 626, 508, 626, 508, 625,
+                1643, 625, 1643, 625, 1643, 625, 39939, 9094, 2195, 625
+            )
+            9 -> PatternUtils.necToPulsePattern(addressByte = 0x04, commandByte = 0x19)
+            else -> {
+                Log.w("CommandMapper", "No IR pattern defined for number: $numberButton")
+                intArrayOf()
+            }
         }
     }
 }

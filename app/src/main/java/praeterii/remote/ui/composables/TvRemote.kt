@@ -23,7 +23,7 @@ import praeterii.remote.ui.theme.RemoteTheme
 import praeterii.remote.utils.RemoteButtonType
 
 private const val EmptyButton = -1
-private val NumberPadNumbers = ((1..9) + EmptyButton +  0)
+private val NumberPadNumbers = ((1..9) + EmptyButton + 0)
 
 @Composable
 fun TvRemoteUi(
@@ -34,7 +34,7 @@ fun TvRemoteUi(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -49,8 +49,7 @@ fun TvRemoteUi(
                 onClick = { onButtonClick(RemoteButtonType.INPUT) },
                 contentDescription = "Input",
                 iconTintColor = MaterialTheme.colorScheme.primary,
-
-                )
+            )
 
             // Power Button - Aligned to the End
             RemoteButton(
@@ -65,12 +64,9 @@ fun TvRemoteUi(
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // D-Pad
+        Spacer(modifier = Modifier.height(16.dp))
         DPad(onDpadClick = onButtonClick)
-
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Volume and Channel Controls
         Row(
@@ -130,8 +126,11 @@ fun TvRemoteUi(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Number Pad
-        NumberPad(onNumberClick = onNumberClick) // Pass the dedicated number click lambda
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            NumberPad(onNumberClick = onNumberClick)
+            Spacer(modifier = Modifier.width(24.dp))
+            AppButtons(onButtonClick = onButtonClick)
+        }
     }
 }
 
@@ -139,9 +138,8 @@ fun TvRemoteUi(
 fun DPad(
     onDpadClick: (RemoteButtonType) -> Unit,
     modifier: Modifier = Modifier
-) { // Changed to RemoteButtonType
+) {
     Box(modifier = modifier.size(200.dp), contentAlignment = Alignment.Center) {
-        // Center "OK" Button
         RemoteButton(
             text = "OK",
             onClick = { onDpadClick(RemoteButtonType.OK) }, // Use Enum
@@ -150,8 +148,6 @@ fun DPad(
             modifier = Modifier.align(Alignment.Center),
             contentDescription = "OK" // Added content description
         )
-
-        // Directional Buttons
         RemoteButton( // Up
             icon = Icons.Filled.KeyboardArrowUp,
             contentDescription = "Up",
@@ -191,7 +187,7 @@ fun DPad(
 fun NumberPad(
     onNumberClick: (Int) -> Unit,
     modifier: Modifier = Modifier
-) { // Stays as (Int) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = modifier.width(200.dp), // Adjust width as needed
@@ -209,6 +205,34 @@ fun NumberPad(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun AppButtons(
+    onButtonClick: (RemoteButtonType) -> Unit
+) {
+    Column {
+        RemoteButton(
+            text = "Disney",
+            contentDescription = "Disney",
+            buttonSize = 65.dp,
+            onClick = { onButtonClick(RemoteButtonType.DISNEY) },
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        RemoteButton(
+            text = "Prime",
+            contentDescription = "Prime",
+            buttonSize = 65.dp,
+            onClick = { onButtonClick(RemoteButtonType.AMAZON) },
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        RemoteButton(
+            text = "Netflix",
+            contentDescription = "Netflix",
+            buttonSize = 65.dp,
+            onClick = { onButtonClick(RemoteButtonType.NETFLIX) },
+        )
     }
 }
 

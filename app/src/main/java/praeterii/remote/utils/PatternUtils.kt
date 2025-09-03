@@ -43,113 +43,62 @@ object PatternUtils {
     }
 
     /**
-     * Generates an IR pulse pattern for the SIRC protocol.
+     * Generates an IR pulse pattern for a SIRC 20-bit command.
      *
-     * @param command The command value (e.g., 0-127 for 7-bit commands).
-     * @param address The address value (e.g., 0-8191 for 13-bit SIRC-20 address).
-     * @param totalDataBits The total number of data bits (command + address).
-     *                      Common values: 12 (SIRC-12), 15 (SIRC-15), 20 (SIRC-20).
-     * @param numCommandBits The number of bits used for the command (typically 7).
-     * @return Pair of Carrier Frequency (Hz) and the IntArray pulse pattern.
+     * @param command The 7-bit command code.
+     * @param deviceAddress The 5-bit device address.
+     * @param extendedAddress The 8-bit extended device address.
+     * @param unitTimeUs The basic time unit (T) in microseconds (typically 600 µs).
+     * @return IntArray suitable for irManager.transmit(), or null if inputs are invalid.
      */
-    fun sircToPulsePattern(
-        command: Int,
-        address: Int,
-        totalDataBits: Int, // e.g., 12, 15, or 20
-        numCommandBits: Int = 7 // Standard SIRC uses 7 bits for command
-    ): Pair<Int, IntArray> {
-        val carrierFrequencyHz = 40000 // Common for SIRC
+    fun getSirc20Pattern(
+        command: Int,          // 0-127
+        deviceAddress: Int,    // 0-31
+        extendedAddress: Int,  // 0-255
+        unitTimeUs: Int = 600
+    ): IntArray {
         val pulses = mutableListOf<Int>()
 
-        // SIRC Timings in microseconds (T = 600µs)
-        val unitTimeUs = 600
-        val startMarkUs = 4 * unitTimeUs // 2400 µs
-        val startSpaceUs = 1 * unitTimeUs  // 600 µs
-        val oneMarkUs = 2 * unitTimeUs   // 1200 µs
-        val oneSpaceUs = 1 * unitTimeUs  // 600 µs
-        val zeroMarkUs = 1 * unitTimeUs  // 600 µs
-        val zeroSpaceUs = 1 * unitTimeUs // 600 µs
+        val startBitHighUs = 4 * unitTimeUs
+        val commonLowUs = 1 * unitTimeUs
+        val logic0HighUs = 1 * unitTimeUs
+        val logic1HighUs = 2 * unitTimeUs
 
-        // 1. Add Start Bit
-        pulses.add(startMarkUs)
-        pulses.add(startSpaceUs)
+        val numCommandBits = 7
+        val numDeviceAddressBits = 5
+        val numExtendedAddressBits = 8
 
-        // 2. Add Command Bits (LSB first)
-        for (i in 0 until numCommandBits) {
-            val bit = (command shr i) and 1
-            if (bit == 1) {
-                pulses.add(oneMarkUs)
-                pulses.add(oneSpaceUs)
-            } else {
-                pulses.add(zeroMarkUs)
-                pulses.add(zeroSpaceUs)
+        // 1. Start Bit
+        pulses.add(startBitHighUs)
+        pulses.add(commonLowUs)
+
+        // Helper function to add bits for a given data field
+        fun addDataBits(data: Int, numBits: Int) {
+            var tempData = data
+            for (i in 0 until numBits) {
+                if ((tempData and 1) == 1) { // Check LSB
+                    pulses.add(logic1HighUs)
+                } else {
+                    pulses.add(logic0HighUs)
+                }
+                pulses.add(commonLowUs) // Each high pulse is followed by a low pulse
+                tempData = tempData shr 1 // Shift to process next bit
             }
         }
 
-        // 3. Add Address Bits (LSB first)
-        val numAddressBits = totalDataBits - numCommandBits
-        if (numAddressBits < 0) {
-            throw IllegalArgumentException("totalDataBits cannot be less than numCommandBits")
-        }
-        for (i in 0 until numAddressBits) {
-            val bit = (address shr i) and 1
-            if (bit == 1) {
-                pulses.add(oneMarkUs)
-                pulses.add(oneSpaceUs)
-            } else {
-                pulses.add(zeroMarkUs)
-                pulses.add(zeroSpaceUs)
-            }
-        }
+        // 2. Command Bits (7 bits, LSB first)
+        addDataBits(command, numCommandBits)
 
-        return Pair(carrierFrequencyHz, pulses.toIntArray())
-    }
+        // 3. Device Address Bits (5 bits, LSB first)
+        addDataBits(deviceAddress, numDeviceAddressBits)
 
-    // Example Usage for SIRC-20 (7 command bits, 13 address bits):
-    fun main() { // Or inside your Android Composable/ViewModel
-        val tvPowerCommand = 0x15 // Example Sony TV Power command (21 decimal) - Verify this!
-        val tvAddress = 0x0001    // Example Sony TV Address (1 decimal) - Verify this!
+        // 4. Extended Address Bits (8 bits, LSB first)
+        addDataBits(extendedAddress, numExtendedAddressBits)
 
-        // For SIRC-20 (7 command bits + 13 address bits = 20 total data bits)
-        val (frequencySirc20, patternSirc20) = sircToPulsePattern(
-            command = tvPowerCommand,
-            address = tvAddress,
-            totalDataBits = 20, // 7 for command + 13 for address
-            numCommandBits = 7
-        )
-        println("SIRC-20:")
-        println("  Carrier Frequency: $frequencySirc20 Hz")
-        println("  Pulse Pattern: ${patternSirc20.joinToString(",")}")
-        println("  Pattern Length (elements): ${patternSirc20.size}") // Should be 2 (start) + 2*20 (data) = 42
+        // The SIRC protocol specifies the command is typically repeated if the total duration
+        // is less than a frame time (e.g., 45ms). For a single transmission via irManager,
+        // one full sequence is usually sent. The last commonLowUs makes the pattern have an even length.
 
-        // For SIRC-12 (7 command bits + 5 address bits = 12 total data bits)
-        // val someDeviceCommand = 0x0A
-        // val someDeviceAddressSirc12 = 0x03 // Max 0x1F for 5 bits
-        // val (frequencySirc12, patternSirc12) = sircToPulsePattern(
-        //     command = someDeviceCommand,
-        //     address = someDeviceAddressSirc12,
-        //     totalDataBits = 12,
-        //     numCommandBits = 7
-        // )
-        // println("\nSIRC-12:")
-        // println("  Carrier Frequency: $frequencySirc12 Hz")
-        // println("  Pulse Pattern: ${patternSirc12.joinToString(",")}")
-        // println("  Pattern Length (elements): ${patternSirc12.size}") // Should be 2 (start) + 2*12 (data) = 26
-
-
-        // Now you can use 'frequency' and 'pattern' with irManager.transmit()
-        // In Android:
-        // if (hasIrEmitter) {
-        //     try {
-        //         irManager.transmit(frequencySirc20, patternSirc20)
-        //         // SIRC often requires sending the command multiple times
-        //         // Thread.sleep(40) // Example delay, adjust based on typical SIRC inter-message gap
-        //         // irManager.transmit(frequencySirc20, patternSirc20)
-        //         // Thread.sleep(40)
-        //         // irManager.transmit(frequencySirc20, patternSirc20)
-        //     } catch (e: Exception) {
-        //         Log.e("IRTransmit", "Error transmitting SIRC", e)
-        //     }
-        // }
+        return pulses.toIntArray()
     }
 }

@@ -24,4 +24,9 @@ enum class RemoteButtonType {
     BACK,
     MUTE,
     INPUT,
+
+    // App Buttons
+    DISNEY,
+    NETFLIX,
+    AMAZON,
 }
