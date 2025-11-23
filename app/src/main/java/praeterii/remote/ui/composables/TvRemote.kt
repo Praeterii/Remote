@@ -2,12 +2,9 @@ package praeterii.remote.ui.composables
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -15,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,26 +27,94 @@ fun TvRemoteUi(
     onButtonClick: (RemoteButtonType) -> Unit,
     onNumberClick: (Int) -> Unit
 ) {
+    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        TvRemoteUiLandscape(
+            modifier = modifier,
+            onButtonClick = onButtonClick,
+            onNumberClick = onNumberClick
+        )
+    } else {
+        TvRemoteUiPortrait(
+            modifier = modifier,
+            onButtonClick = onButtonClick,
+            onNumberClick = onNumberClick
+        )
+    }
+}
+
+@Composable
+private fun TvRemoteUiPortrait(
+    modifier: Modifier = Modifier,
+    onButtonClick: (RemoteButtonType) -> Unit,
+    onNumberClick: (Int) -> Unit
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(20.dp),
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         SystemControls(onButtonClick = onButtonClick)
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         DPad(onDpadClick = onButtonClick)
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         VolumeAndChannelControls(onButtonClick = onButtonClick)
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         OtherControls(onButtonClick = onButtonClick)
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         // Number and apps buttons
         Row(verticalAlignment = Alignment.CenterVertically) {
             NumberPad(onNumberClick = onNumberClick)
             Spacer(modifier = Modifier.width(24.dp))
             AppButtons(onButtonClick = onButtonClick)
+        }
+    }
+}
+
+@Composable
+private fun TvRemoteUiLandscape(
+    modifier: Modifier = Modifier,
+    onButtonClick: (RemoteButtonType) -> Unit,
+    onNumberClick: (Int) -> Unit
+) {
+    val scrollState = rememberScrollState()
+    Row(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .padding(20.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Left Column: DPad + System
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            SystemControls(onButtonClick = onButtonClick)
+            Spacer(modifier = Modifier.height(24.dp))
+            DPad(onDpadClick = onButtonClick)
+        }
+
+        Spacer(modifier = Modifier.width(32.dp))
+
+        // Right Column: Vol/Ch, Other, Numbers/Apps
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            VolumeAndChannelControls(onButtonClick = onButtonClick)
+            Spacer(modifier = Modifier.height(16.dp))
+            OtherControls(onButtonClick = onButtonClick)
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                NumberPad(onNumberClick = onNumberClick)
+                Spacer(modifier = Modifier.width(24.dp))
+                AppButtons(onButtonClick = onButtonClick)
+            }
         }
     }
 }
@@ -200,23 +266,31 @@ private fun NumberPad(
     onNumberClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        modifier = modifier.width(200.dp), // Adjust width as needed
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    val numberRows = (1..9).chunked(3) + listOf(listOf(null, 0, null))
+
+    Column(
+        modifier = modifier.width(200.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        val emptyButton = -1
-        val numberPadNumbers = ((1..9) + emptyButton + 0)
-        items(items = numberPadNumbers, key = { it }) { number ->
-            if (number != emptyButton) {
-                RemoteButton(
-                    text = number.toString(),
-                    onClick = { onNumberClick(number) },
-                    buttonSize = 50.dp,
-                    fontSize = 18.sp,
-                    contentDescription = "Number $number",
-                )
+        numberRows.forEach { row ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                row.forEach { number ->
+                    if (number != null) {
+                        RemoteButton(
+                            text = number.toString(),
+                            onClick = { onNumberClick(number) },
+                            buttonSize = 50.dp,
+                            fontSize = 18.sp,
+                            contentDescription = "Number $number",
+                            modifier = Modifier.weight(1f)
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
             }
         }
     }
