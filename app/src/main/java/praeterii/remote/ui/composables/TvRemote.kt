@@ -23,9 +23,6 @@ import praeterii.remote.R
 import praeterii.remote.ui.theme.RemoteTheme
 import praeterii.remote.utils.RemoteButtonType
 
-private const val EmptyButton = -1
-private val NumberPadNumbers = ((1..9) + EmptyButton + 0)
-
 @Composable
 fun TvRemoteUi(
     modifier: Modifier = Modifier,
@@ -209,8 +206,10 @@ private fun NumberPad(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(items = NumberPadNumbers, key = { it }) { number ->
-            if (number != EmptyButton) {
+        val emptyButton = -1
+        val numberPadNumbers = ((1..9) + emptyButton + 0)
+        items(items = numberPadNumbers, key = { it }) { number ->
+            if (number != emptyButton) {
                 RemoteButton(
                     text = number.toString(),
                     onClick = { onNumberClick(number) },
