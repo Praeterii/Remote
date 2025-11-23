@@ -2,6 +2,7 @@ package praeterii.remote.ui.composables
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -36,7 +37,7 @@ fun TvRemoteUi(
             .fillMaxSize()
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -124,7 +125,7 @@ fun TvRemoteUi(
                 onClick = { onButtonClick(RemoteButtonType.BACK) })
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             NumberPad(onNumberClick = onNumberClick)
@@ -237,23 +238,13 @@ fun AppButtons(
 }
 
 @Preview(name = "Light Mode")
+@Preview(name = "Small phone", heightDp = 600)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Landscape", device = "spec:width=411dp,height=891dp,orientation=landscape")
 @Composable
-fun TvRemoteUiPreview() {
+private fun TvRemoteUiPreview() {
     RemoteTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
-            TvRemoteUi(
-                onButtonClick = {},
-                onNumberClick = {}
-            )
-        }
-    }
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun TvRemoteUiPreview_DarkMode() {
-    RemoteTheme {
-        Surface {
             TvRemoteUi(
                 onButtonClick = {},
                 onNumberClick = {}

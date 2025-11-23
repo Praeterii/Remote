@@ -162,7 +162,7 @@ class LgMagicRemoteCommandMapper : IrPatternMapper {
             )
             9 -> PatternUtils.necToPulsePattern(addressByte = 0x04, commandByte = 0x19)
             else -> {
-                Log.w("CommandMapper", "No IR pattern defined for number: $numberButton")
+                Log.e("CommandMapper", "No IR pattern defined for number: $numberButton")
                 intArrayOf()
             }
         }
