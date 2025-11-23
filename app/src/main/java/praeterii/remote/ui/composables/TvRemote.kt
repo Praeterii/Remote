@@ -39,94 +39,15 @@ fun TvRemoteUi(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween, // Distributes space
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // New "Settings" Button - Example
-            RemoteButton(
-                painter = painterResource(id = R.drawable.ic_input),
-                onClick = { onButtonClick(RemoteButtonType.INPUT) },
-                contentDescription = "Input",
-                iconTintColor = MaterialTheme.colorScheme.primary,
-            )
-
-            // Power Button - Aligned to the End
-            RemoteButton(
-                painter = painterResource(id = R.drawable.ic_power_on_off),
-                onClick = { onButtonClick(RemoteButtonType.POWER) },
-                buttonSize = 64.dp,
-                iconSize = 32.dp,
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                contentDescription = "Power",
-                iconTintColor = Color.White,
-            )
-        }
-
+        SystemControls(onButtonClick = onButtonClick)
         Spacer(modifier = Modifier.height(16.dp))
         DPad(onDpadClick = onButtonClick)
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Volume and Channel Controls
-        Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                RemoteButton(
-                    painter = painterResource(id = R.drawable.outline_volume_up_24),
-                    contentDescription = "Volume Up",
-                    onClick = { onButtonClick(RemoteButtonType.VOL_UP) },
-                    iconTintColor = MaterialTheme.colorScheme.primary,
-                )
-                Text("VOL", style = MaterialTheme.typography.labelSmall)
-                RemoteButton(
-                    painter = painterResource(id = R.drawable.outline_volume_down_24),
-                    contentDescription = "Volume Down",
-                    onClick = { onButtonClick(RemoteButtonType.VOL_DOWN) },
-                    iconTintColor = MaterialTheme.colorScheme.primary,
-                )
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                RemoteButton(
-                    icon = Icons.Filled.KeyboardArrowUp,
-                    contentDescription = "Channel Up",
-                    onClick = { onButtonClick(RemoteButtonType.CH_UP) })
-                Text("CH", style = MaterialTheme.typography.labelSmall)
-                RemoteButton(
-                    icon = Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "Channel Down",
-                    onClick = { onButtonClick(RemoteButtonType.CH_DOWN) })
-            }
-        }
-
+        VolumeAndChannelControls(onButtonClick = onButtonClick)
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Other Controls (Mute, Home, Back)
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            RemoteButton(
-                painter = painterResource(id = R.drawable.baseline_volume_off_24),
-                contentDescription = "Mute",
-                onClick = { onButtonClick(RemoteButtonType.MUTE) },
-                iconTintColor = MaterialTheme.colorScheme.primary,
-            )
-            RemoteButton(
-                icon = Icons.Filled.Home,
-                contentDescription = "Home",
-                onClick = { onButtonClick(RemoteButtonType.HOME) })
-            RemoteButton(
-                icon = Icons.Filled.ArrowBack,
-                contentDescription = "Back",
-                onClick = { onButtonClick(RemoteButtonType.BACK) })
-        }
-
+        OtherControls(onButtonClick = onButtonClick)
         Spacer(modifier = Modifier.height(16.dp))
-
+        // Number and apps buttons
         Row(verticalAlignment = Alignment.CenterVertically) {
             NumberPad(onNumberClick = onNumberClick)
             Spacer(modifier = Modifier.width(24.dp))
@@ -136,7 +57,100 @@ fun TvRemoteUi(
 }
 
 @Composable
-fun DPad(
+private fun OtherControls(
+    onButtonClick: (RemoteButtonType) -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        RemoteButton(
+            painter = painterResource(id = R.drawable.baseline_volume_off_24),
+            contentDescription = "Mute",
+            onClick = { onButtonClick(RemoteButtonType.MUTE) },
+            iconTintColor = MaterialTheme.colorScheme.primary,
+        )
+        RemoteButton(
+            icon = Icons.Filled.Home,
+            contentDescription = "Home",
+            onClick = { onButtonClick(RemoteButtonType.HOME) })
+        RemoteButton(
+            icon = Icons.Filled.ArrowBack,
+            contentDescription = "Back",
+            onClick = { onButtonClick(RemoteButtonType.BACK) })
+    }
+}
+
+@Composable
+private fun VolumeAndChannelControls(
+    onButtonClick: (RemoteButtonType) -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            RemoteButton(
+                painter = painterResource(id = R.drawable.outline_volume_up_24),
+                contentDescription = "Volume Up",
+                onClick = { onButtonClick(RemoteButtonType.VOL_UP) },
+                iconTintColor = MaterialTheme.colorScheme.primary,
+            )
+            Text("VOL", style = MaterialTheme.typography.labelSmall)
+            RemoteButton(
+                painter = painterResource(id = R.drawable.outline_volume_down_24),
+                contentDescription = "Volume Down",
+                onClick = { onButtonClick(RemoteButtonType.VOL_DOWN) },
+                iconTintColor = MaterialTheme.colorScheme.primary,
+            )
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            RemoteButton(
+                icon = Icons.Filled.KeyboardArrowUp,
+                contentDescription = "Channel Up",
+                onClick = { onButtonClick(RemoteButtonType.CH_UP) })
+            Text("CH", style = MaterialTheme.typography.labelSmall)
+            RemoteButton(
+                icon = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "Channel Down",
+                onClick = { onButtonClick(RemoteButtonType.CH_DOWN) })
+        }
+    }
+}
+
+@Composable
+private fun SystemControls(
+    onButtonClick: (RemoteButtonType) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween, // Distributes space
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // New "Settings" Button - Example
+        RemoteButton(
+            painter = painterResource(id = R.drawable.ic_input),
+            onClick = { onButtonClick(RemoteButtonType.INPUT) },
+            contentDescription = "Input",
+            iconTintColor = MaterialTheme.colorScheme.primary,
+        )
+
+        // Power Button - Aligned to the End
+        RemoteButton(
+            painter = painterResource(id = R.drawable.ic_power_on_off),
+            onClick = { onButtonClick(RemoteButtonType.POWER) },
+            buttonSize = 64.dp,
+            iconSize = 32.dp,
+            shape = CircleShape,
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+            contentDescription = "Power",
+            iconTintColor = Color.White,
+        )
+    }
+}
+
+@Composable
+private fun DPad(
     onDpadClick: (RemoteButtonType) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -185,7 +199,7 @@ fun DPad(
 }
 
 @Composable
-fun NumberPad(
+private fun NumberPad(
     onNumberClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -210,7 +224,7 @@ fun NumberPad(
 }
 
 @Composable
-fun AppButtons(
+private fun AppButtons(
     onButtonClick: (RemoteButtonType) -> Unit
 ) {
     Column {
