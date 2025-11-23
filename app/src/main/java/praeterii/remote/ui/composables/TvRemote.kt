@@ -28,9 +28,9 @@ private val NumberPadNumbers = ((1..9) + EmptyButton + 0)
 
 @Composable
 fun TvRemoteUi(
+    modifier: Modifier = Modifier,
     onButtonClick: (RemoteButtonType) -> Unit,
-    onNumberClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    onNumberClick: (Int) -> Unit
 ) {
     Column(
         modifier = modifier

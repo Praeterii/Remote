@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Remote</string>
+    <string name="no_ir_manager_error">Error: No IrManager found</string>
 </resources>
