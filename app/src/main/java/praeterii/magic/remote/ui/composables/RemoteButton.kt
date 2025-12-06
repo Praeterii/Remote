@@ -1,4 +1,4 @@
-package praeterii.remote.ui.composables
+package praeterii.magic.remote.ui.composables
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import praeterii.remote.R
-import praeterii.remote.ui.theme.RemoteTheme
+import praeterii.magic.remote.ui.theme.RemoteTheme
+import praeterii.magic.remote.R
 
 @Composable
 fun RemoteButton(

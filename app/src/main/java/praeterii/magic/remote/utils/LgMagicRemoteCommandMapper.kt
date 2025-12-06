@@ -1,4 +1,4 @@
-package praeterii.remote.utils
+package praeterii.magic.remote.utils
 
 import android.util.Log
 

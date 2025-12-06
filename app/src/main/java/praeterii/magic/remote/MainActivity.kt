@@ -1,4 +1,4 @@
-package praeterii.remote
+package praeterii.magic.remote
 
 import android.hardware.ConsumerIrManager
 import android.os.Bundle
@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import praeterii.remote.ui.composables.TvRemoteUi
-import praeterii.remote.ui.theme.RemoteTheme
-import praeterii.remote.utils.LgMagicRemoteCommandMapper
-import praeterii.remote.utils.RemoteButtonType
+import praeterii.magic.remote.ui.composables.TvRemoteUi
+import praeterii.magic.remote.ui.theme.RemoteTheme
+import praeterii.magic.remote.utils.LgMagicRemoteCommandMapper
+import praeterii.magic.remote.utils.RemoteButtonType
 
 class MainActivity : ComponentActivity() {
     private val carrierFrequencyHz = 38000 // Common frequency

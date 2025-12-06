@@ -1,4 +1,4 @@
-package praeterii.remote.ui.theme
+package praeterii.magic.remote.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

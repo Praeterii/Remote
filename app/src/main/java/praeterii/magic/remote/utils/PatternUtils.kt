@@ -1,4 +1,4 @@
-package praeterii.remote.utils
+package praeterii.magic.remote.utils
 
 object PatternUtils {
     fun necToPulsePattern(addressByte: Int = 0x04, commandByte: Int): IntArray {

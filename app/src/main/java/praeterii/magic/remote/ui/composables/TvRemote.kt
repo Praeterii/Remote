@@ -1,4 +1,4 @@
-package praeterii.remote.ui.composables
+package praeterii.magic.remote.ui.composables
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
@@ -17,9 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import praeterii.remote.R
-import praeterii.remote.ui.theme.RemoteTheme
-import praeterii.remote.utils.RemoteButtonType
+import praeterii.magic.remote.ui.theme.RemoteTheme
+import praeterii.magic.remote.utils.RemoteButtonType
+import praeterii.magic.remote.R
 
 @Composable
 fun TvRemoteUi(

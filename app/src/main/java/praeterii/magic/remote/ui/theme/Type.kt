@@ -1,4 +1,4 @@
-package praeterii.remote.ui.theme
+package praeterii.magic.remote.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

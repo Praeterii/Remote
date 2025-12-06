@@ -1,4 +1,4 @@
-package praeterii.remote.ui.theme
+package praeterii.magic.remote.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

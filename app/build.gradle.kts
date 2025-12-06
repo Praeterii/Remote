@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "praeterii.remote"
+    namespace = "praeterii.magic.remote"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "praeterii.remote"
+        applicationId = "praeterii.magic.remote"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

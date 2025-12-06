@@ -1,4 +1,4 @@
-package praeterii.remote.utils
+package praeterii.magic.remote.utils
 
 enum class RemoteButtonType {
     // Power
