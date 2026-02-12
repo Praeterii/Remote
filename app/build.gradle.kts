@@ -28,6 +28,8 @@ android {
             )
         }
         create("beta") {
+            applicationIdSuffix = ".beta"
+            versionNameSuffix = "-beta"
             isMinifyEnabled = true
             isShrinkResources = false
             isDebuggable = false
@@ -36,6 +38,10 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("debug")
+        }
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
         }
     }
     compileOptions {
