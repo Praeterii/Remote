@@ -2,9 +2,7 @@ package praeterii.magic.remote.ui.composables
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -78,43 +76,49 @@ private fun TvRemoteUiLandscape(
     onButtonClick: (RemoteButtonType) -> Unit,
     onNumberClick: (Int) -> Unit
 ) {
-    val scrollState = rememberScrollState()
     Row(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(20.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Left Column: DPad + System
+        // Left Section: System Controls + DPad
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1.5f)
+                .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             SystemControls(onButtonClick = onButtonClick)
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             DPad(onDpadClick = onButtonClick)
         }
 
-        Spacer(modifier = Modifier.width(32.dp))
-
-        // Right Column: Vol/Ch, Other, Numbers/Apps
+        // Middle Section: Volume + Channel Controls
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             VolumeAndChannelControls(onButtonClick = onButtonClick)
             Spacer(modifier = Modifier.height(16.dp))
             OtherControls(onButtonClick = onButtonClick)
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                NumberPad(onNumberClick = onNumberClick)
-                Spacer(modifier = Modifier.width(24.dp))
-                AppButtons(onButtonClick = onButtonClick)
-            }
+        }
+
+        // Right Section: Numbers + App Buttons
+        Row(
+            modifier = Modifier
+                .weight(1.5f)
+                .fillMaxHeight(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            NumberPad(onNumberClick = onNumberClick)
+            AppButtons(onButtonClick = onButtonClick)
         }
     }
 }
