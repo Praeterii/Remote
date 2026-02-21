@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -76,49 +77,53 @@ private fun TvRemoteUiLandscape(
     onButtonClick: (RemoteButtonType) -> Unit,
     onNumberClick: (Int) -> Unit
 ) {
-    Row(
+    Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(24.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Left Section: System Controls + DPad
-        Column(
-            modifier = Modifier
-                .weight(1.5f)
-                .fillMaxHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            SystemControls(onButtonClick = onButtonClick)
-            Spacer(modifier = Modifier.height(20.dp))
-            DPad(onDpadClick = onButtonClick)
-        }
+        SystemControls(onButtonClick = onButtonClick)
 
-        // Middle Section: Volume + Channel Controls
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            VolumeAndChannelControls(onButtonClick = onButtonClick)
-            Spacer(modifier = Modifier.height(16.dp))
-            OtherControls(onButtonClick = onButtonClick)
-        }
-
-        // Right Section: Numbers + App Buttons
         Row(
             modifier = Modifier
-                .weight(1.5f)
-                .fillMaxHeight(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                .fillMaxWidth()
+                .weight(1f),
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Column(
+                modifier = Modifier
+                    .weight(1.2f)
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                DPad(onDpadClick = onButtonClick)
+            }
+
             NumberPad(onNumberClick = onNumberClick)
-            AppButtons(onButtonClick = onButtonClick)
+
+            Row(
+                modifier = Modifier
+                    .weight(1.5f)
+                    .fillMaxHeight(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AppButtons(onButtonClick = onButtonClick)
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    VolumeAndChannelControls(onButtonClick = onButtonClick)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    OtherControls(onButtonClick = onButtonClick)
+                }
+            }
         }
     }
 }
@@ -142,7 +147,7 @@ private fun OtherControls(
             contentDescription = "Home",
             onClick = { onButtonClick(RemoteButtonType.HOME) })
         RemoteButton(
-            icon = Icons.Filled.ArrowBack,
+            icon = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = "Back",
             onClick = { onButtonClick(RemoteButtonType.BACK) })
     }
@@ -224,16 +229,16 @@ private fun DPad(
     Box(modifier = modifier.size(200.dp), contentAlignment = Alignment.Center) {
         RemoteButton(
             text = "OK",
-            onClick = { onDpadClick(RemoteButtonType.OK) }, // Use Enum
+            onClick = { onDpadClick(RemoteButtonType.OK) },
             buttonSize = 70.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.Center),
-            contentDescription = "OK" // Added content description
+            contentDescription = "OK"
         )
         RemoteButton( // Up
             icon = Icons.Filled.KeyboardArrowUp,
             contentDescription = "Up",
-            onClick = { onDpadClick(RemoteButtonType.DPAD_UP) }, // Use Enum
+            onClick = { onDpadClick(RemoteButtonType.DPAD_UP) },
             buttonSize = 55.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.TopCenter)
@@ -241,23 +246,23 @@ private fun DPad(
         RemoteButton( // Down
             icon = Icons.Filled.KeyboardArrowDown,
             contentDescription = "Down",
-            onClick = { onDpadClick(RemoteButtonType.DPAD_DOWN) }, // Use Enum
+            onClick = { onDpadClick(RemoteButtonType.DPAD_DOWN) },
             buttonSize = 55.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
         RemoteButton( // Left
-            icon = Icons.Filled.KeyboardArrowLeft,
+            icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             contentDescription = "Left",
-            onClick = { onDpadClick(RemoteButtonType.DPAD_LEFT) }, // Use Enum
+            onClick = { onDpadClick(RemoteButtonType.DPAD_LEFT) },
             buttonSize = 55.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.CenterStart)
         )
         RemoteButton( // Right
-            icon = Icons.Filled.KeyboardArrowRight,
+            icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "Right",
-            onClick = { onDpadClick(RemoteButtonType.DPAD_RIGHT) }, // Use Enum
+            onClick = { onDpadClick(RemoteButtonType.DPAD_RIGHT) },
             buttonSize = 55.dp,
             shape = CircleShape,
             modifier = Modifier.align(Alignment.CenterEnd)
