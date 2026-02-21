@@ -40,7 +40,7 @@ import praeterii.magic.remote.ui.theme.RemoteTheme
 import praeterii.magic.remote.R
 
 @Composable
-fun RemoteButton(
+internal fun RemoteButton(
     modifier: Modifier = Modifier,
     text: String? = null,
     icon: ImageVector? = null,      // For Material Icons
@@ -113,7 +113,7 @@ fun RemoteButton(
 
 @Preview(name = "Icon Button (Outlined)", group = "RemoteButton")
 @Composable
-fun RemoteButtonPreview_IconOutlined() {
+internal fun RemoteButtonPreview_IconOutlined() {
     MaterialTheme { // Wrap with MaterialTheme for proper defaults
         Surface { // Surface provides a background color from the theme
             RemoteButton(
@@ -127,7 +127,7 @@ fun RemoteButtonPreview_IconOutlined() {
 
 @Preview(name = "Text Button (Outlined)", group = "RemoteButton")
 @Composable
-fun RemoteButtonPreview_TextOutlined() {
+internal fun RemoteButtonPreview_TextOutlined() {
     MaterialTheme {
         Surface {
             RemoteButton(
@@ -141,7 +141,7 @@ fun RemoteButtonPreview_TextOutlined() {
 
 @Preview(name = "Painter Button (XML Icon)", group = "RemoteButton")
 @Composable
-fun RemoteButtonPreview_PainterXml() {
+internal fun RemoteButtonPreview_PainterXml() {
     MaterialTheme {
         Surface {
             // Make sure you have 'ic_power_on_off' or similar in your drawables
@@ -162,7 +162,7 @@ fun RemoteButtonPreview_PainterXml() {
 
 @Preview(name = "IconResId Button (XML Icon)", group = "RemoteButton")
 @Composable
-fun RemoteButtonPreview_IconResIdXml() {
+internal fun RemoteButtonPreview_IconResIdXml() {
     MaterialTheme {
         Surface {
             RemoteButton(
@@ -178,7 +178,7 @@ fun RemoteButtonPreview_IconResIdXml() {
 
 @Preview(name = "Circular Icon Button", group = "RemoteButton")
 @Composable
-fun RemoteButtonPreview_CircularIcon() {
+internal fun RemoteButtonPreview_CircularIcon() {
     MaterialTheme {
         Surface {
             RemoteButton(
@@ -196,7 +196,7 @@ fun RemoteButtonPreview_CircularIcon() {
 
 @Preview(name = "Custom Themed Button", group = "RemoteButton")
 @Composable
-fun RemoteButtonPreview_CustomTheme() {
+internal fun RemoteButtonPreview_CustomTheme() {
     RemoteTheme {
         Surface {
             RemoteButton(

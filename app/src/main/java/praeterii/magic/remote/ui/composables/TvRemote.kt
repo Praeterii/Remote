@@ -22,7 +22,7 @@ import praeterii.magic.remote.utils.RemoteButtonType
 import praeterii.magic.remote.R
 
 @Composable
-fun TvRemoteUi(
+internal fun TvRemoteUi(
     modifier: Modifier = Modifier,
     onButtonClick: (RemoteButtonType) -> Unit,
     onNumberClick: (Int) -> Unit
@@ -325,17 +325,20 @@ private fun AppButtons(
 }
 
 @Preview(name = "Light Mode")
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(name = "Small phone", heightDp = 600)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "Landscape", device = "spec:width=411dp,height=891dp,orientation=landscape")
+@Preview(name = "Landscape", device = "spec:width=420dp,height=891dp,orientation=landscape")
+@Preview(
+    name = "Landscape-dark",
+    device = "spec:width=420dp,height=891dp,orientation=landscape",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 private fun TvRemoteUiPreview() {
     RemoteTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            TvRemoteUi(
-                onButtonClick = {},
-                onNumberClick = {}
-            )
-        }
+        TvRemoteUi(
+            onButtonClick = {},
+            onNumberClick = {}
+        )
     }
 }
